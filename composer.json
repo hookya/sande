@@ -1,0 +1,20 @@
+{
+    "name": "hookya/sande",
+    "description": "杉德支付lib库",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Sande\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "hooky",
+            "email": "hooky@aliyun.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    }
+}
