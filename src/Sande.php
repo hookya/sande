@@ -277,16 +277,16 @@ class Sande
      * @throws InvalidArgumentException
      * @return mixed
      */
-    private function publicKey(string $path)
+    private function publicKey(string $content)
     {
-        if ($path == '') {
-            throw new InvalidArgumentException("公钥地址不正确");
-        }
-        $file = file_get_contents($path);
-        if (! $file) {
-            throw new VerifyException('getPublicKey::file_get_contents ERROR');
-        }
-        $cert = chunk_split(base64_encode($file), 64, "\n");
+//        if ($path == '') {
+//            throw new InvalidArgumentException("公钥地址不正确");
+//        }
+//        $file = file_get_contents($path);
+//        if (! $file) {
+//            throw new VerifyException('getPublicKey::file_get_contents ERROR');
+//        }
+        $cert = chunk_split(base64_encode($content), 64, "\n");
         $cert = "-----BEGIN CERTIFICATE-----\n" . $cert . "-----END CERTIFICATE-----\n";
         $res = openssl_pkey_get_public($cert);
         $detail = openssl_pkey_get_details($res);
