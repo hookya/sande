@@ -213,7 +213,7 @@ class Sande
      */
     private function checkEmpty($value): bool
     {
-        echo $value;
+//        echo $value;
         if (! isset($value)) {
             return true;
         }
