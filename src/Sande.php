@@ -108,12 +108,15 @@ class Sande
      * @param array $data
      * @param string|null $publicKey
      * @return Notify
+     * @throws VerifyException
      */
     public function notify(array $data,?string $publicKey = ""): Notify
     {
         $sign = $data['sign'] ?? '';
-        $this->verify($data['data'], $sign,$publicKey);
-        return new PaymentNotify(json_decode($data['data'],true));
+        if ($this->verify($data['data'], $sign,$publicKey)) {
+            return new PaymentNotify(json_decode($data['data'],true));
+        }
+        throw new VerifyException("验签失败");
     }
 
     /**
@@ -247,7 +250,7 @@ class Sande
     public function verify(string $plainText, string $sign,?string $publicKey = ''): bool
     {
         if ($publicKey == '') {
-            $publicKey = $this->$publicKey;
+            $publicKey = $this->publicKey;
         }
         try {
             $resource = openssl_pkey_get_public($this->publicKey($publicKey));
@@ -277,16 +280,16 @@ class Sande
      * @throws InvalidArgumentException
      * @return mixed
      */
-    private function publicKey(string $content)
+    private function publicKey(string $path)
     {
-//        if ($path == '') {
-//            throw new InvalidArgumentException("公钥地址不正确");
-//        }
-//        $file = file_get_contents($path);
-//        if (! $file) {
-//            throw new VerifyException('getPublicKey::file_get_contents ERROR');
-//        }
-        $cert = chunk_split(base64_encode($content), 64, "\n");
+        if ($path == '') {
+            throw new InvalidArgumentException("公钥地址不正确");
+        }
+        $file = file_get_contents($path);
+        if (! $file) {
+            throw new VerifyException('getPublicKey::file_get_contents ERROR');
+        }
+        $cert = chunk_split(base64_encode($file), 64, "\n");
         $cert = "-----BEGIN CERTIFICATE-----\n" . $cert . "-----END CERTIFICATE-----\n";
         $res = openssl_pkey_get_public($cert);
         $detail = openssl_pkey_get_details($res);
