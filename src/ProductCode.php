@@ -23,7 +23,11 @@ class ProductCode
 
     const CLOUD_OPEN_ACC_AND_PAY = '04010001';
 
-    const CLOUD_CONSUME_C2C = '04010003';
+    const CLOUD_CONSUME_C2C = '04010004';
+
+    const CLOUD_CONSUME_C2B = '04010001';
+    // c2c转账担保消费
+    const CLOUD_CONSUME_DC2C = '04010003';
 
     const CLOUD_ACCOUNT = '00000001';
 }

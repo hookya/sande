@@ -70,6 +70,95 @@ class Sande
     }
 
     /**
+     * @param string $recvUserId 收款方会员编号
+     * @param string $bizType
+     * @param string $amount
+     * @param string $goodsName
+     * @param string $payUserId
+     * @param string $orderNo
+     * @param string $notifyUrl
+     * @param string $returnUrl
+     * @param array $config
+     * @return void
+     */
+    public function cloudC2C(string $recvUserId, string $bizType,string $amount,string $goodsName,string $payUserId, string $orderNo, string $notifyUrl, string $returnUrl, array $config = []):string
+    {
+        //操作类型 转账申请
+        $operationType = "1";
+        if ($recvUserId == '') {
+            throw new InvalidArgumentException("收款方账户不能为空");
+        }
+        if ($bizType != BizType::TYPE_CONFIRM && $bizType != BizType::TYPE_REAL) {
+            throw new InvalidArgumentException("转账类型不正确");
+        }
+        if ($payUserId == '') {
+            throw new InvalidArgumentException("支付方账户不能为空");
+        }
+        if ($orderNo == '') {
+            throw new InvalidArgumentException("订单号不能为空");
+        }
+        if ($notifyUrl == '') {
+            throw new InvalidArgumentException("回调地址不能为空");
+        }
+        if ($returnUrl == '') {
+            throw new InvalidArgumentException("返回地址不能为空");
+        }
+
+        $config = Utils::filterConfig(Config::getCloudC2COptions(),$config);
+        if ($config['userFeeAmt'] = 0) {
+            unset($config['userFeeAmt']);
+        }
+        $payExtra = array_merge($config,compact('operationType','recvUserId','bizType','payUserId'));
+        return $this->buildPageUrl($this->baseUrl,
+            ProductCode::CLOUD_CONSUME_C2C,
+            $orderNo,
+            $amount,
+            $goodsName,
+            $notifyUrl,
+            $returnUrl,
+            json_encode($payExtra));
+    }
+
+    public function cloudDC2C()
+    {
+
+    }
+
+    /**
+     * @param string $userId 用户id
+     * @param string $nickname 用户昵称
+     * @param string $orderNo 订单号
+     * @param string $amount 订单金额
+     * @param string $goodsName 商品名称
+     * @param string $notify 回调地址
+     * @param string $returnUrl 跳转返回地址
+     * @return string
+     */
+    public function cloudC2B(string $userId,string $nickname,string $orderNo,string $amount,string $goodsName,string $notify,string $returnUrl): string
+    {
+        if ($userId == '') {
+            throw new InvalidArgumentException("用户id不能为空");
+        }
+
+        if ($nickname == '') {
+            throw new InvalidArgumentException("用户昵称不能为空");
+        }
+
+        $payExtra = compact('userId','nickname');
+
+        return $this->buildPageUrl(
+            $this->baseUrl,
+            ProductCode::CLOUD_CONSUME_C2B,
+            $orderNo,
+            '0.01',
+            '',
+            $notify,
+            $returnUrl,
+            json_encode($payExtra)
+        );
+    }
+
+    /**
      * 一键快捷支付
      * @param string $userId
      * @param string $orderNo
