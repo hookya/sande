@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Sande;
 
 use Exception;
-use Sande\Contract\Notify;
+use Sande\Contract\AccNotifyInterface;
+use Sande\Contract\NotifyInterface;
+use Sande\Contract\TransNotifyInterface;
 use Sande\Exception\InvalidArgumentException;
 use Sande\Exception\VerifyException;
 
@@ -196,14 +198,44 @@ class Sande
     /**
      * @param array $data
      * @param string|null $publicKey
-     * @return Notify
+     * @return NotifyInterface
      * @throws VerifyException
      */
-    public function notify(array $data,?string $publicKey = ""): Notify
+    public function notify(array $data,?string $publicKey = ""): NotifyInterface
     {
         $sign = $data['sign'] ?? '';
         if ($this->verify($data['data'], $sign,$publicKey)) {
             return new PaymentNotify(json_decode($data['data'],true));
+        }
+        throw new VerifyException("验签失败");
+    }
+
+    /**
+     * @param array $data
+     * @param string|null $publicKey
+     * @return AccNotifyInterface
+     * @throws VerifyException
+     */
+    public function accNotify(array $data,?string $publicKey = ""):AccNotifyInterface
+    {
+        $sign = $data['sign'] ?? '';
+        if ($this->verify($data['data'], $sign,$publicKey)) {
+            return new AccNotify(json_decode($data['data'],true));
+        }
+        throw new VerifyException("验签失败");
+    }
+
+    /**
+     * @param array $data
+     * @param string|null $publicKey
+     * @return TransNotifyInterface
+     * @throws VerifyException
+     */
+    public function transNotify(array $data,?string $publicKey = ""):TransNotifyInterface
+    {
+        $sign = $data['sign'] ?? '';
+        if ($this->verify($data['data'], $sign,$publicKey)) {
+            return new TransNotify(json_decode($data['data'],true));
         }
         throw new VerifyException("验签失败");
     }

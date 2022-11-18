@@ -2,9 +2,9 @@
 
 namespace Sande;
 
-use Sande\Contract\Notify;
+use Sande\Contract\NotifyInterface;
 
-class PaymentNotify implements Notify
+class PaymentNotify implements NotifyInterface
 {
 
     private $orderNo = '';
@@ -50,5 +50,15 @@ class PaymentNotify implements Notify
     public function getData(): array
     {
         return $this->data;
+    }
+
+    public function getMsg(): string
+    {
+        return $this->getData()['head']['respMsg'] ?? '';
+    }
+
+    public function getMid(): string
+    {
+        return $this->getData()['body']['mid'] ?? '';
     }
 }
