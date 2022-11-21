@@ -4,6 +4,9 @@
     "type": "library",
     "license": "MIT",
     "autoload": {
+        "files": [
+            "src/Functions.php"
+        ],
         "psr-4": {
             "Sande\\": "src/"
         }
@@ -17,6 +20,7 @@
     "require": {
         "php": ">=7.1",
         "ext-json": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "guzzlehttp/guzzle": "^7.5"
     }
 }

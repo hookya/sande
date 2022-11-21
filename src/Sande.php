@@ -254,6 +254,16 @@ class Sande
     }
 
     /**
+     * @param string $privateKey
+     * @param string $pwd
+     * @return Elec
+     */
+    public function createElec(string $privateKey,string $pwd): Elec
+    {
+        return new Elec($this->merNo,$this->publicKey,$privateKey,$pwd);
+    }
+
+    /**
      * 创建请求页面的url地址
      * @param string $baseUrl 基础url
      * @param string $productCode 产品标号
@@ -311,6 +321,15 @@ class Sande
         $query = http_build_query($data);
         // 返回url
         return $baseUrl . '?' . $query;
+    }
+
+    /**
+     * 对账单查询
+     * @return void
+     */
+    public function billQuery(string $data,int $type)
+    {
+
     }
 
     /**
