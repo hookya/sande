@@ -13,4 +13,6 @@ interface BaseNotifyInterface
     public function getOrderNo(): string;
 
     public function getMid():string;
+
+    public function getData():array;
 }

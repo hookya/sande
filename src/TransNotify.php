@@ -93,4 +93,9 @@ class TransNotify implements TransNotifyInterface
     {
         return $this->data['postscript'] ?? '';
     }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
 }

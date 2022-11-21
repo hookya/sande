@@ -16,6 +16,8 @@ class Sande
 
     protected $baseUrl = 'https://sandcash.mixienet.com.cn/pay/h5/fastpayment';
 
+    protected $cloudUrl = "https://faspay-oss.sandpay.com.cn/pay/h5/cloud";
+
     protected $merNo = '';
 
     protected $merKey = '';
@@ -35,6 +37,7 @@ class Sande
         $this->merNo = $configs['merNo'] ?? '';
         $this->merKey = $configs['merKey'] ?? '';
         $this->md5Key = $configs['md5Key'] ?? '';
+        $this->publicKey = $configs['publicKey'] ?? '';
     }
 
     /**
@@ -60,7 +63,7 @@ class Sande
 
 
         return $this->buildPageUrl(
-            $this->baseUrl,
+            $this->cloudUrl,
             ProductCode::CLOUD_ACCOUNT,
             $orderNo,
             '0.01',
@@ -111,7 +114,7 @@ class Sande
             unset($config['userFeeAmt']);
         }
         $payExtra = array_merge($config,compact('operationType','recvUserId','bizType','payUserId'));
-        return $this->buildPageUrl($this->baseUrl,
+        return $this->buildPageUrl($this->cloudUrl,
             ProductCode::CLOUD_CONSUME_C2C,
             $orderNo,
             $amount,
@@ -149,7 +152,7 @@ class Sande
         $payExtra = compact('userId','nickname');
 
         return $this->buildPageUrl(
-            $this->baseUrl,
+            $this->cloudUrl,
             ProductCode::CLOUD_CONSUME_C2B,
             $orderNo,
             '0.01',
