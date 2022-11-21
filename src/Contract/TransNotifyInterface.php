@@ -32,6 +32,6 @@ interface TransNotifyInterface extends BaseNotifyInterface
 
     public function getUserFeeAmt():string;
 
-    public function getFeeAmd():string;
+    public function getFeeAmt():string;
 
 }
