@@ -6,8 +6,7 @@ namespace Sande;
 
 use Sande\Contract\AccNotifyInterface;
 
-class AccNotify implements
-    AccNotifyInterface
+class AccNotify implements AccNotifyInterface
 {
 
     protected $data = [];
@@ -70,5 +69,10 @@ class AccNotify implements
     public function getMid(): string
     {
         return $this->data['mid'] ?? '';
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
     }
 }

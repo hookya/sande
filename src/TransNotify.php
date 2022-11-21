@@ -98,4 +98,14 @@ class TransNotify implements TransNotifyInterface
     {
         return $this->data;
     }
+
+    public function getUserFeeAmt(): string
+    {
+        return $this->data['userFeeAmt'] ?? (string)0.0;
+    }
+
+    public function getFeeAmd(): string
+    {
+        return $this->data['userFeeAmt'] ?? (string)0.0;
+    }
 }
