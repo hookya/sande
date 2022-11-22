@@ -49,17 +49,17 @@ class Sande
      * @param string $returnUrl
      * @return string
      */
-    public function cloudPage(string $userId,string $nickname,string $orderNo,string $notify,string $returnUrl): string
+    public function cloudPage(string $userId,string $nickName,string $orderNo,string $notify,string $returnUrl): string
     {
         if ($userId == '') {
             throw new InvalidArgumentException("用户id不能为空");
         }
 
-        if ($nickname == '') {
+        if ($nickName == '') {
             throw new InvalidArgumentException("用户昵称不能为空");
         }
 
-        $payExtra = compact('userId','nickname');
+        $payExtra = compact('userId','nickName');
 
 
         return $this->buildPageUrl(
