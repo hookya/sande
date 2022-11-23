@@ -270,7 +270,7 @@ class Sande
      */
     public function createElec(): Elec
     {
-        return new Elec($this->merNo,$this->publicKey,$this->privateKey,$this->publicKey);
+        return new Elec($this->merNo,$this->publicKey,$this->privateKey,$this->password);
     }
 
     /**
