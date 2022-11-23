@@ -21,7 +21,7 @@ class Elec
      */
     private $privateKey;
 
-    private $baseUrl = '';
+    private $baseUrl = 'https://cap.sandpay.com.cn';
 
     /**
      * @var string

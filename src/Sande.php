@@ -8,6 +8,8 @@ use Exception;
 use Sande\Contract\AccNotifyInterface;
 use Sande\Contract\NotifyInterface;
 use Sande\Contract\TransNotifyInterface;
+use Sande\Exception\DecryptException;
+use Sande\Exception\EncryptException;
 use Sande\Exception\InvalidArgumentException;
 use Sande\Exception\VerifyException;
 
@@ -29,6 +31,8 @@ class Sande
 
     protected $privateKey = '';
 
+    protected $password = '';
+
     /**
      * @param array $configs
      */
@@ -38,6 +42,8 @@ class Sande
         $this->merKey = $configs['merKey'] ?? '';
         $this->md5Key = $configs['md5Key'] ?? '';
         $this->publicKey = $configs['publicKey'] ?? '';
+        $this->privateKey = $configs['privateKey'] ?? '';
+        $this->password = $configs['password'];
     }
 
     /**
@@ -218,14 +224,17 @@ class Sande
      * @param string|null $publicKey
      * @return AccNotifyInterface
      * @throws VerifyException
+     * @throws EncryptException
+     * @throws DecryptException
      */
     public function accNotify(array $data,?string $publicKey = ""):AccNotifyInterface
     {
+        $public = loadX509Cert($this->publicKey);
+        $private = loadPk12Cert($this->privateKey,$this->password);
         $sign = $data['sign'] ?? '';
-        if ($this->verify($data['data'], $sign,$publicKey)) {
-            return new AccNotify(json_decode($data['data'],true));
-        }
-        throw new VerifyException("验签失败");
+
+        $data = $this->sha1Verify($data['data'], $sign,$public,$private,$data[''] ?? 'encryptKey');
+        return new AccNotify($data);
     }
 
     /**
@@ -233,14 +242,17 @@ class Sande
      * @param string|null $publicKey
      * @return TransNotifyInterface
      * @throws VerifyException
+     * @throws EncryptException
+     * @throws DecryptException
      */
     public function transNotify(array $data,?string $publicKey = ""):TransNotifyInterface
     {
+        $public = loadX509Cert($this->publicKey);
+        $private = loadPk12Cert($this->privateKey,$this->password);
         $sign = $data['sign'] ?? '';
-        if ($this->verify($data['data'], $sign,$publicKey)) {
-            return new TransNotify(json_decode($data['data'],true));
-        }
-        throw new VerifyException("验签失败");
+
+        $data = $this->sha1Verify($data['data'], $sign,$public,$private,$data[''] ?? 'encryptKey');
+        return new TransNotify($data);
     }
 
     /**
@@ -254,13 +266,11 @@ class Sande
     }
 
     /**
-     * @param string $privateKey
-     * @param string $pwd
      * @return Elec
      */
-    public function createElec(string $privateKey,string $pwd): Elec
+    public function createElec(): Elec
     {
-        return new Elec($this->merNo,$this->publicKey,$privateKey,$pwd);
+        return new Elec($this->merNo,$this->publicKey,$this->privateKey,$this->publicKey);
     }
 
     /**
@@ -443,4 +453,28 @@ class Sande
         return $detail['key'];
     }
 
+    /**
+     * @param string $data
+     * @param string $sign
+     * @param $private
+     * @param $public
+     * @param string $AESKey
+     * @return mixed
+     * @throws EncryptException
+     * @throws VerifyException
+     * @throws DecryptException
+     */
+    public function sha1Verify(string $data, string $sign, $private, $public, string $AESKey)
+    {
+        // step8: 使用公钥验签报文$decryptPlainText
+        $verify = verify($data, $sign, $public);
+        if ($verify != 1) {
+            throw new VerifyException("验签失败");
+        }
+        // step9: 使用私钥解密AESKey
+        $decryptAESKey = RSADecryptByPri($AESKey, $private);
+        // step10: 使用解密后的AESKey解密报文
+        $decryptPlainText = AESDecrypt($data, $decryptAESKey);
+        return  json_decode($decryptPlainText,true);
+    }
 }
