@@ -59,6 +59,25 @@ class Elec
         return $this->request($this->getUrl($uri),compact('orderNo','date','type'));
     }
 
+
+    /**
+     * 企业向个人转账
+     * @throws VerifyException
+     * @throws EncryptException
+     * @throws GuzzleException
+     * @throws RequestException
+     * @throws DecryptException
+     */
+    public function transfer(string $accountType, string $orderAmt, string $bizUserNo, string $name, array $options = []): array
+    {
+        $payee = compact('bizUserNo','name');
+        $uri = '/v4/electrans/ceas.elec.trans.corp.transfer';
+        return $this->request(
+            $this->getUrl($uri),
+            array_merge(compact('accountType','orderAmt','payee'),$options)
+        );
+    }
+
     /**
      * @throws GuzzleException
      * @throws EncryptException
