@@ -100,8 +100,8 @@ class Elec
         // step5: 将加密后的data，通过商户私钥进行签名生成sign，signType为"SHA1WithRSA"
         $data['sign'] = sign($data['data'], $private);
         // step6: post请求
-        $response = $this->client->post($url,[
-            'json' => $data,
+        $response = $this->client->request('POST',$url,[
+            'body' => json_encode($data),
             'headers' => [
                 'content-type' => 'application/json'
             ]

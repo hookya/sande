@@ -165,9 +165,12 @@ function AESEncrypt($plainText, $key): string
 {
     ksort($plainText);
     $plainText = json_encode($plainText);
-    $len = openssl_cipher_iv_length("aes-128-cbc");
-    $iv = openssl_random_pseudo_bytes($len);
-    $result = openssl_encrypt($plainText, "aes-128-cbc", $key,OPENSSL_RAW_DATA,$iv);
+    $len = openssl_cipher_iv_length("aes-128-ecb");
+    $iv = "";
+    if ($len > 0) {
+        $iv = openssl_random_pseudo_bytes($len);
+    }
+    $result = openssl_encrypt($plainText, "aes-128-ebc", $key,OPENSSL_RAW_DATA,$iv);
     if (!$result) {
         throw new EncryptException('报文加密错误');
     }
