@@ -229,11 +229,8 @@ class Sande
      */
     public function accNotify(array $data,?string $publicKey = ""):AccNotifyInterface
     {
-        $public = loadX509Cert($this->publicKey);
-        $private = loadPk12Cert($this->privateKey,$this->password);
         $sign = $data['sign'] ?? '';
-
-        $data = $this->sha1Verify($data['data'], $sign,$public,$private,$data[''] ?? 'encryptKey');
+        $data = $this->sha1Verify($data['data'], $sign,$data['encryptKey'] ?? '');
         return new AccNotify($data);
     }
 
@@ -247,11 +244,8 @@ class Sande
      */
     public function transNotify(array $data,?string $publicKey = ""):TransNotifyInterface
     {
-        $public = loadX509Cert($this->publicKey);
-        $private = loadPk12Cert($this->privateKey,$this->password);
         $sign = $data['sign'] ?? '';
-
-        $data = $this->sha1Verify($data['data'], $sign,$public,$private,$data[''] ?? 'encryptKey');
+        $data = $this->sha1Verify($data['data'], $sign,$data['encryptKey'] ?? '');
         return new TransNotify($data);
     }
 
@@ -456,16 +450,16 @@ class Sande
     /**
      * @param string $data
      * @param string $sign
-     * @param $private
-     * @param $public
      * @param string $AESKey
      * @return mixed
+     * @throws DecryptException
      * @throws EncryptException
      * @throws VerifyException
-     * @throws DecryptException
      */
-    public function sha1Verify(string $data, string $sign, $private, $public, string $AESKey)
+    public function sha1Verify(string $data, string $sign, string $AESKey)
     {
+        $public = loadX509Cert($this->publicKey);
+        $private = loadPk12Cert($this->privateKey,$this->password);
         // step8: 使用公钥验签报文$decryptPlainText
         $verify = verify($data, $sign, $public);
         if ($verify != 1) {
