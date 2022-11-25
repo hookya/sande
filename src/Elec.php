@@ -93,7 +93,7 @@ class Elec
         $uri = '/v4/elecaccount/ceas.elec.member.info.query';
         return $this->request(
             $this->getUrl($uri),
-            compact($bizUserNo)
+            compact('bizUserNo')
         );
     }
 
