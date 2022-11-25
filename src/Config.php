@@ -13,7 +13,7 @@ class Config
     {
         return [
             'remark' => '',
-            'userFeeAmt' => 0,
+            'userFeeAmt' => '0',
             'postscript' => "",
         ];
     }

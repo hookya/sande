@@ -40,3 +40,17 @@ class Utils {
 //$result = Utils::filterConfig($template,$config);
 //
 //print_r($result);
+
+//$template = [
+//    'remark' => '',
+//    'userFeeAmt' => '0',
+//    'postscript' => "",
+//];
+//
+//$conf = [
+//    'userFeeAmt' => '1'
+//];
+//
+//$result = Utils::filterConfig($template,$conf);
+//
+//print_r($result);

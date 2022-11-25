@@ -115,8 +115,7 @@ class Sande
             throw new InvalidArgumentException("返回地址不能为空");
         }
 
-        $config = Utils::filterConfig(Config::getCloudC2COptions(),$config);
-        if ($config['userFeeAmt'] = 0) {
+        if (bccomp($config['userFeeAmt'],'0') <= 0) {
             unset($config['userFeeAmt']);
         }
         $payExtra = array_merge($config,compact('operationType','recvUserId','bizType','payUserId'));
