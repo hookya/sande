@@ -44,7 +44,7 @@ class Elec
     /**
      * 对账单查询
      * @param string $orderNo
-     * @param string $date
+     * @param string $billDate
      * @param string $type
      * @return array
      * @throws DecryptException
@@ -53,10 +53,10 @@ class Elec
      * @throws RequestException
      * @throws VerifyException
      */
-    public function billQuery(string $orderNo,string $date,string $type = '01'): array
+    public function billQuery(string $orderNo,string $billDate,string $type = '01'): array
     {
         $uri = '/v4/electrans/ceas.elec.trans.bill.query';
-        return $this->request($this->getUrl($uri),compact('orderNo','date','type'));
+        return $this->request($this->getUrl($uri),compact('orderNo','billDate','type'));
     }
 
 
