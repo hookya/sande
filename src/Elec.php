@@ -109,12 +109,12 @@ class Elec
      * @throws RequestException
      * @throws VerifyException
      */
-    public function userModify(string $bizUserNo,string $notifyUrl,string $frontUrl,string $bizType = 'CLOSE'): array
+    public function userModify(string $customerOrderNo,string $bizUserNo,string $notifyUrl,string $frontUrl,string $bizType = 'CLOSE'): array
     {
         $uri = '/v4/elecaccount/ceas.elec.account.member.status.modify';
         return $this->request(
             $this->getUrl($uri),
-            compact('bizUserNo','bizType','notifyUrl','frontUrl')
+            compact('customerOrderNo','bizUserNo','bizType','notifyUrl','frontUrl')
         );
     }
 
