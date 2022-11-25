@@ -68,13 +68,13 @@ class Elec
      * @throws RequestException
      * @throws DecryptException
      */
-    public function transfer(string $accountType, string $orderAmt, string $bizUserNo, string $name, array $options = []): array
+    public function transfer(string $customerOrderNo,string $accountType, string $orderAmt, string $bizUserNo, string $name, array $options = []): array
     {
         $payee = compact('bizUserNo','name');
         $uri = '/v4/electrans/ceas.elec.trans.corp.transfer';
         return $this->request(
             $this->getUrl($uri),
-            array_merge(compact('accountType','orderAmt','payee'),$options)
+            array_merge(compact('customerOrderNo','accountType','orderAmt','payee'),$options)
         );
     }
 
