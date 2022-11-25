@@ -21,6 +21,7 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-openssl": "*",
-        "guzzlehttp/guzzle": "^7.5"
+        "guzzlehttp/guzzle": "^7.5",
+        "ext-bcmath": "*"
     }
 }
