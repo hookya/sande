@@ -79,6 +79,47 @@ class Elec
     }
 
     /**
+     * 用户开户信息查询
+     * @param string $bizUserNo
+     * @return array
+     * @throws DecryptException
+     * @throws EncryptException
+     * @throws GuzzleException
+     * @throws RequestException
+     * @throws VerifyException
+     */
+    public function infoQuery(string $bizUserNo): array
+    {
+        $uri = '/v4/elecaccount/ceas.elec.member.info.query';
+        return $this->request(
+            $this->getUrl($uri),
+            compact($bizUserNo)
+        );
+    }
+
+    /**
+     * @param string $bizUserNo
+     * @param string $notifyUrl
+     * @param string $frontUrl
+     * @param string $bizType
+     * @return array
+     * @throws DecryptException
+     * @throws EncryptException
+     * @throws GuzzleException
+     * @throws RequestException
+     * @throws VerifyException
+     */
+    public function userModify(string $bizUserNo,string $notifyUrl,string $frontUrl,string $bizType = 'CLOSE'): array
+    {
+        $uri = '/v4/elecaccount/ceas.elec.account.member.status.modify';
+        return $this->request(
+            $this->getUrl($uri),
+            compact('bizUserNo','bizType','notifyUrl','frontUrl')
+        );
+    }
+
+    
+    /**
      * @throws GuzzleException
      * @throws EncryptException
      * @throws RequestException
